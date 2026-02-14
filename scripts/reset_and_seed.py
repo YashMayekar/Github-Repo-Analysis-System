@@ -59,18 +59,18 @@ def reset_and_seed():
 
             print(f"Seeding team: {team_name}")
             
-            # TeamScore (All 0s)
-            ts = TeamScore(
-                run_id=run.id,
-                team_name=team_name,
-                productivity_score=0.0,
-                commit_count=0,
-                additions=0,
-                deletions=0,
-                churn_rate=0.0,
-                is_finalized=False
-            )
-            session.add(ts)
+            # # TeamScore (All 0s)
+            # ts = TeamScore(
+            #     run_id=run.id,
+            #     team_name=team_name,
+            #     productivity_score=0.0,
+            #     commit_count=0,
+            #     additions=0,
+            #     deletions=0,
+            #     churn_rate=0.0,
+            #     is_finalized=False
+            # )
+            # session.add(ts)
             
             # Create Team Record for Background Monitoring
             repo_url = row.get("team_github_repo", "")
@@ -78,18 +78,18 @@ def reset_and_seed():
                 t = Team(name=team_name, repo_url=str(repo_url).strip(), branch="main")
                 session.merge(t) # merge to avoid duplicates if any
             
-            session.flush() # Get ID
+            # session.flush() # Get ID
             
-            # TeamAnalytics (All Empty/Zeros)
-            analytics = TeamAnalytics(
-                team_score_id=ts.id,
-                hourly_commits=[0]*24,
-                hourly_volume=[0]*24,
-                top_files=[],
-                top_folders=[],
-                file_types=[]
-            )
-            session.add(analytics)
+            # # TeamAnalytics (All Empty/Zeros)
+            # analytics = TeamAnalytics(
+            #     team_score_id=ts.id,
+            #     hourly_commits=[0]*24,
+            #     hourly_volume=[0]*24,
+            #     top_files=[],
+            #     top_folders=[],
+            #     file_types=[]
+            # )
+            # session.add(analytics)
             
         session.commit()
         print("Database reset and seeded successfully from Excel.")

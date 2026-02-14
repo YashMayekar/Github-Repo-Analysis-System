@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from sqlmodel import Session, select
 from app.db.session import get_session
-from app.models.db_models import CollectionRun, TeamScore, Commit, FileChange, TeamAnalytics
+from app.models.db_models import CollectionRun, TeamScore, Commit, FileChange, Team
 from app.models.api_models import TeamScoreResponse, CommitResponse, TeamAnalyticsResponse
 
 router = APIRouter()
@@ -10,10 +10,48 @@ router = APIRouter()
 @router.get("/teams", response_model=List[TeamScoreResponse])
 def get_team_history(session: Session = Depends(get_session)):
     """
-    Retrieve all team scores history.
+    Retrieve all teams with their current scores.
+    Teams with no commits will return zeroed scores.
     """
-    scores = session.exec(select(TeamScore)).all()
-    return scores
+
+    # 1️⃣ Get active hackathon run
+    run = session.exec(
+        select(CollectionRun)
+        .where(CollectionRun.status == "running")
+    ).first()
+
+    # 2️⃣ Fetch all teams
+    teams = session.exec(select(Team)).all()
+
+    # 3️⃣ Fetch scores ONLY for active run
+    scores = []
+    if run:
+        scores = session.exec(
+            select(TeamScore)
+            .where(TeamScore.run_id == run.id)
+        ).all()
+
+    score_map = {s.team_name: s for s in scores}
+
+    # 4️⃣ Merge (LEFT JOIN behavior)
+    response: List[TeamScoreResponse] = []
+
+    for team in teams:
+        ts = score_map.get(team.name)
+
+        response.append(
+            TeamScoreResponse(
+                team_name=team.name,
+                commit_count=ts.commit_count if ts else 0,
+                additions=ts.additions if ts else 0,
+                deletions=ts.deletions if ts else 0,
+                churn_rate=ts.churn_rate if ts else 0.0,
+                productivity_score=ts.productivity_score if ts else 0.0,
+                is_finalized=ts.is_finalized if ts else False,
+            )
+        )
+
+    return response
 
 @router.get("/summary")
 def get_collection_history(session: Session = Depends(get_session)):
@@ -86,6 +124,7 @@ def get_team_analytics(team_name: str, session: Session = Depends(get_session)):
         productivity_score=latest_score.productivity_score,
         hourly_commits=latest_score.analytics.hourly_commits,
         hourly_volume=latest_score.analytics.hourly_volume,
+        top_contributors=latest_score.analytics.top_contributors,
         top_files=latest_score.analytics.top_files,
         top_folders=latest_score.analytics.top_folders,
         file_types=latest_score.analytics.file_types,

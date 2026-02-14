@@ -41,6 +41,7 @@ class TeamAnalytics(SQLModel, table=True):
     top_files: List[Dict] = Field(sa_type=JSON, default=[])
     top_folders: List[Dict] = Field(sa_type=JSON, default=[])
     file_types: List[Dict] = Field(sa_type=JSON, default=[])
+    top_contributors: List[Dict] = Field(sa_type=JSON, default=[])
 
     team_score: "TeamScore" = Relationship(back_populates="analytics")
 
