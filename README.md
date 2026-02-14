@@ -76,6 +76,7 @@ The system uses **SQLModel** (SQLAlchemy + Pydantic).
 ### Event Management
 -   `POST /api/v1/collect/start-event`: Start a new event. Deactivates any previous events and records the current UTC time as event start.
 -   `GET /api/v1/collect/event-status`: Get the active event status, including `is_active`, `event_start_time`, and `elapsed_seconds`.
+- `POST /api/v1/collect/end-event`: Terminates an active event and stops data collection
 
 ### Collectors
 -   `POST /api/v1/collect/refresh`: Trigger a manual refresh for all teams. Requires an active event. Uses `since` filter (event start - 5min buffer).

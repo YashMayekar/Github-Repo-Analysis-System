@@ -58,6 +58,7 @@ def get_event_status():
         return {
             "is_active": True,
             "event_start_time": event.event_start_time.isoformat(),
+            "event_end_time": None,
             "elapsed_seconds": int(elapsed)
         }
 
@@ -97,7 +98,69 @@ async def refresh_all_teams():
             timestamp=run.timestamp
         )
 
-@router.post("/finalize/{team_name}")
+@router.post("/end-event")
+async def end_event():
+    with Session(engine) as session:
+        event = _get_active_event(session)
+        if not event:
+            raise HTTPException(status_code=400, detail="No active event to end.")
+
+        teams = session.exec(select(Team)).all()
+        if not teams:
+            raise HTTPException(status_code=404, detail="No teams found.")
+
+        finalized_teams = []
+        skipped_teams = []
+
+        for team in teams:
+            latest_score = session.exec(
+                select(TeamScore)
+                .where(TeamScore.team_name == team.name)
+                .order_by(TeamScore.id.desc())
+            ).first()
+
+            # Skip if already finalized
+            if latest_score and latest_score.is_finalized:
+                skipped_teams.append(team.name)
+                continue
+
+            commits = session.exec(
+                select(Commit).where(Commit.team_name == team.name)
+            ).all()
+
+            if not commits:
+                continue  # Skip teams with no commits
+
+            summaries = [c.ai_explanation for c in commits if c.ai_explanation]
+            scores = [c.ai_score for c in commits if c.ai_score]
+
+            final_review = await ai_service.generate_final_review(
+                team.name, summaries, scores
+            )
+
+            if latest_score:
+                latest_score.final_review = final_review
+                latest_score.is_finalized = True
+                session.add(latest_score)
+                finalized_teams.append(team.name)
+
+        # Deactivate the event
+        event.is_active = False
+        event.event_end_time = datetime.utcnow()
+        session.add(event)
+        session.commit()
+
+
+        return {
+            "is_active": False,
+            "event_end_time": event.event_end_time.isoformat(),
+            "finalized_teams": finalized_teams,
+            "skipped_teams": skipped_teams,
+            "message": "Event ended. Team reviews finalized where applicable."
+        }
+
+
+@router.post("/finalize-team/{team_name}")
 async def finalize_team_review(team_name: str):
     with Session(engine) as session:
         commits = session.exec(select(Commit).where(Commit.team_name == team_name)).all()
@@ -116,13 +179,6 @@ async def finalize_team_review(team_name: str):
             latest_score.final_review = final_review
             latest_score.is_finalized = True
             session.add(latest_score)
-            session.commit()
-        
-        # Deactivate the event on finalize
-        event = _get_active_event(session)
-        if event:
-            event.is_active = False
-            session.add(event)
             session.commit()
             
         return {

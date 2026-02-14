@@ -6,6 +6,7 @@ class EventConfig(SQLModel, table=True):
     __tablename__ = "event_config"
     id: Optional[int] = Field(default=None, primary_key=True)
     event_start_time: datetime
+    event_end_time: Optional[datetime] = None
     is_active: bool = True
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
