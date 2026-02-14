@@ -1,0 +1,33 @@
+# Team Mapping Configuration
+# Map GitHub usernames to team names
+# Format: username: team_name
+
+teams:
+  frontend:
+    - alice
+    - bob
+    - charlie
+  
+  backend:
+    - david
+    - eve
+    - frank
+  
+  devops:
+    - grace
+    - henry
+  
+  data:
+    - iris
+    - jack
+
+# Default team for unmapped users
+default_team: unassigned
+
+# Repository-specific team mappings (optional)
+repository_teams:
+  my-org/frontend-app:
+    - frontend
+  my-org/backend-api:
+    - backend
+    - devops

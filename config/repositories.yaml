@@ -1,0 +1,76 @@
+# Repository Configuration
+# List of repositories to collect data from
+
+repositories:
+  - url: https://github.com/omsingh10/COHERENCE-25_ORPS_WebApp
+    enabled: true
+
+  - url: https://github.com/Saumya10a/COHERENCE-25_TechNinja_WEB-APP
+    enabled: true
+
+  - url: https://github.com/VedantKale29/coherence25_hackermons_aiml
+    enabled: true
+
+  - url: https://github.com/Satya481/COHERENCES25_Strom-Breaker_Web-App
+    enabled: true
+
+  - url: https://github.com/nishant-bhandigare/Coherence25_SacredScripts_WebApp
+    enabled: true
+
+  - url: https://github.com/ShaileshAgrawal07/COHERENCE-25_Blockchain
+    enabled: true
+
+  - url: https://github.com/AkshaySingh91/COHERENCE-25_Codeyoddha_Web
+    enabled: true
+
+  - url: https://github.com/Jayom5797/COHERENCE-25_ByteCode_Web
+    enabled: true
+
+  - url: https://github.com/VivekkumarChauhan/COHERENCE-25_Interpretrs_web-app
+    enabled: true
+
+  - url: https://github.com/Akash2432004/COHERENCE-25_ByteMe_AIML
+    enabled: true
+
+  - url: https://github.com/MohammedYaseenRon/COHERENCE-25_CodeWizard_AIML
+    enabled: true
+
+  - url: https://github.com/anish4463/COHERENCE-25_TeamAlliance_AIML
+    enabled: true
+
+  - url: https://github.com/Sohamore/COHERENCE-25_OGCoders_Web-App
+    enabled: true
+
+  - url: https://github.com/Swayam29082004/COHERENCE-25_CODEDOT_AI-ML
+    enabled: true
+
+  - url: https://github.com/obitojod/Coherence-25_ChandaMama_AIML
+    enabled: true
+
+  - url: https://github.com/Shivam-sati/COHERENCE-25_Cyber-Ninjas_AI-ML
+    enabled: true
+
+  - url: https://github.com/swarup1606/COHERENCE-25_Buri-Buri-Jaimons_AIML
+    enabled: true
+
+  - url: https://github.com/OMKAR2810P/COHERENCE-25_Dot_Sol_BlockChain
+    enabled: true
+
+  - url: https://github.com/shrushtikhemnar2005/COHERENCE-25_HackHers_Web-App
+    enabled: true
+
+  - url: https://github.com/vaishnavi-gaikwad1709/COHERENCE-25_A-PS-V_Blockchain
+    enabled: true
+
+  - url: https://github.com/akarekar27/COHERENCE-25_BitBlitz_Web-App
+    enabled: true
+
+  - url: https://github.com/Shield-without-sword/COHERENCE-25_Shield-without-Sword_AI-ML
+    enabled: true
+
+# Global filters (can be overridden per repository)
+filters:
+  date_from: null   # YYYY-MM-DD
+  date_to: null     # YYYY-MM-DD
+  authors: []       # GitHub usernames
+  teams: []         # Team names

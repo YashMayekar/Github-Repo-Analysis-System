@@ -1,0 +1,21 @@
+
+requests==2.31.0
+python-dotenv==1.0.0
+PyYAML==6.0.1
+pandas>=2.0
+PyGithub==2.1.1
+tenacity==8.2.3
+python-dateutil==2.8.2
+colorlog==6.8.0
+
+# API & Server
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic-settings>=2.1.0
+httpx>=0.26.0
+
+# Database
+sqlmodel>=0.0.14
+
+# Excel
+openpyxl>=3.1.2
