@@ -41,6 +41,7 @@ class TeamAnalyticsResponse(BaseModel):
     productivity_score: float
     hourly_commits: List[int]
     hourly_volume: List[int]
+    top_contributors: List[dict]
     top_files: List[dict]
     top_folders: List[dict]
     file_types: List[dict]
