@@ -86,7 +86,7 @@ The system uses **SQLModel** (SQLAlchemy + Pydantic).
 -   `GET /api/v1/history/summary`: Get the main leaderboard list.
 -   `GET /api/v1/history/teams`: Get all tracked teams with their latest scores.
 -   `GET /api/v1/history/analytics/{team_name}`: Get deep-dive analytics (charts/graphs data).
-
+ 
 ---
 
 ## 🛠️ Setup & Usage
